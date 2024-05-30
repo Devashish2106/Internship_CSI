@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management Tool</title>
+</head>
+<body>
+    <h1>File Management Tool</h1>
+    <div>
+        <h2>Create File</h2>
+        <input type="text" id="createFileName" placeholder="File name">
+        <textarea id="createFileContent" placeholder="File content"></textarea>
+        <button onclick="createFile()">Create</button>
+        <p id="createFileResult"></p>
+    </div>
+    <div>
+        <h2>Read File</h2>
+        <input type="text" id="readFileName" placeholder="File name">
+        <button onclick="readFile()">Read</button>
+        <pre id="readFileResult"></pre>
+    </div>
+    <div>
+        <h2>Delete File</h2>
+        <input type="text" id="deleteFileName" placeholder="File name">
+        <button onclick="deleteFile()">Delete</button>
+        <p id="deleteFileResult"></p>
+    </div>
+    <script>
+        async function createFile() {
+            const fileName = document.getElementById('createFileName').value;
+            const fileContent = document.getElementById('createFileContent').value;
+
+            const response = await fetch(`/create?name=${fileName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: fileContent
+            });
+
+            const result = await response.text();
+            document.getElementById('createFileResult').innerText = result;
+        }
+
+        async function readFile() {
+            const fileName = document.getElementById('readFileName').value;
+
+            const response = await fetch(`/read?name=${fileName}`, {
+                method: 'GET'
+            });
+
+            const result = await response.text();
+            document.getElementById('readFileResult').innerText = result;
+        }
+
+        async function deleteFile() {
+            const fileName = document.getElementById('deleteFileName').value;
+
+            const response = await fetch(`/delete?name=${fileName}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.text();
+            document.getElementById('deleteFileResult').innerText = result;
+        }
+    </script>
+</body>
+</html>
