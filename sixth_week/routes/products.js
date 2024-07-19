@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/upload');
 
 let products = [];
 
 // Create a new product
-router.post('/', (req, res) => {
-  const product = req.body;
+router.post('/', upload.single('image'), (req, res) => {
+  const product = { ...req.body, image: req.file.path };
   products.push(product);
   res.status(201).send(product);
 });
